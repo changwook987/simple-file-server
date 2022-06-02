@@ -1,2 +1,7 @@
 # Project exclude paths
 /.gradle/
+/build/
+
+#result file
+result
+result/*
