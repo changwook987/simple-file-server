@@ -83,24 +83,11 @@ public class ClientThread extends Thread {
                         String filename = query.getArguments().get(0);
                         String value = query.getArguments().get(1);
 
-                        File[] files = Server.FILES.listFiles();
+                        File targetFile = new File(Server.FILES, filename);
 
-                        if (files != null) {
-                            boolean flag = false;
-                            for (File file : files) {
-                                if (file != null) {
-                                    if (file.getName().equals(filename)) {
-                                        writer.append(new Result("ERROR").addArgument("이름이 같은 파일이 존재합니다").build());
-                                        writer.flush();
-                                        flag = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (flag) {
-                                continue;
-                            }
+                        if (targetFile.exists()) {
+                            writer.append(new Result("ERROR").addArgument("이름이 같은 파일이 존재합니다").build());
+                            writer.flush();
                         }
 
                         downloadFile(filename, value);
@@ -116,21 +103,9 @@ public class ClientThread extends Thread {
                     case "DOWNLOAD": {
                         String filename = query.getArguments().get(0);
 
-                        File[] files = Server.FILES.listFiles();
-                        File targetFile = null;
+                        File targetFile = new File(Server.FILES, filename);
 
-                        if (files != null) {
-                            for (File file : files) {
-                                if (file != null) {
-                                    if (file.getName().equals(filename)) {
-                                        targetFile = file;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (targetFile == null) {
+                        if (!targetFile.exists()) {
                             writer.append(new Result("ERROR").addArgument("파일을 찾을 수 없었습니다").build());
                             writer.flush();
                         } else {
@@ -159,7 +134,8 @@ public class ClientThread extends Thread {
                 }
             }
 
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException |
+                 NumberFormatException e) {
             System.err.println("에러 발생 " + e);
         } finally {
             try {
@@ -178,6 +154,7 @@ public class ClientThread extends Thread {
             System.out.println(client.getInetAddress() + " 와 연결이 해제 됩니다");
             Server.clients.remove(client.getInetAddress());
         }
+
     }
 
     private void downloadFile(String filename, String value) throws IOException {

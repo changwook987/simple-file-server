@@ -6,7 +6,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 public class Server {
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class Server {
     private Server() {
     }
 
-    public static final ConcurrentHashMap<InetAddress, ClientThread> clients = new ConcurrentHashMap<>();
+    public static final HashMap<InetAddress, ClientThread> clients = new HashMap<>();
 
     public static final String ID = "admin";
     public static final String PW = "1234";
