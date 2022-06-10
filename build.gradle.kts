@@ -1,8 +1,8 @@
 plugins {
-    java
+    kotlin("jvm") version "1.6.21"
 }
 
-group = "kr.hs.dgsw.network"
+group = "io.github.changwook987"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -10,29 +10,22 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
-}
-
-java {
-    targetCompatibility = JavaVersion.VERSION_1_8
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    implementation(kotlin("stdlib"))
 }
 
 tasks {
-    getByName<Test>("test") {
-        useJUnitPlatform()
-    }
-
     create<Jar>("serverJar") {
         from(sourceSets["main"].output)
 
         manifest {
-            attributes["Main-Class"] = "kr.hs.dgsw.network.test01.n2118.server.Server"
+            attributes["Main-Class"] = "io.github.changwook987.simpleFileServer.ServerKt"
         }
 
         archiveBaseName.set("Server")
         archiveVersion.set("")
+
+        from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         copy {
             from(archiveFile)
@@ -44,11 +37,14 @@ tasks {
         from(sourceSets["main"].output)
 
         manifest {
-            attributes["Main-Class"] = "kr.hs.dgsw.network.test01.n2118.client.Client"
+            attributes["Main-Class"] = "io.github.changwook987.simpleFileServer.ClientKt"
         }
 
         archiveBaseName.set("Client")
         archiveVersion.set("")
+
+        from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         copy {
             from(archiveFile)
