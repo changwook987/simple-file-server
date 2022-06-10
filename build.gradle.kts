@@ -27,9 +27,11 @@ tasks {
         from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        copy {
-            from(archiveFile)
-            into(File(project.rootDir, "result"))
+        doLast {
+            copy {
+                from(archiveFile)
+                into(File(project.rootDir, "result"))
+            }
         }
     }
 
@@ -46,9 +48,11 @@ tasks {
         from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        copy {
-            from(archiveFile)
-            into(File(project.rootDir, "result"))
+        doLast {
+            copy {
+                from(archiveFile)
+                into(File(project.rootDir, "result"))
+            }
         }
     }
 
